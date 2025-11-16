@@ -1,0 +1,21 @@
+# Configuración para desarrollo
+spring:
+  datasource:
+    url: jdbc:h2:mem:cafe_limon_dev
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+logging:
+  level:
+    com.cafelimon: DEBUG
