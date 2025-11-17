@@ -243,15 +243,16 @@ cafe-limon/
 - **Jakarta Validation** - Validación de datos
 
 ### Frontend
-- **React 18.3.1** - Librería UI
-- **Vite 6.0** - Build tool y dev server
+- **React 19.2.0** - Librería UI
+- **Vite 5.4.11** - Build tool y dev server
+- **Vitest 4.0.9** - Testing framework
 - **Tailwind CSS 3.4** - Framework CSS utility-first
-- **React Router v7** - Routing
-- **Axios 1.7** - Cliente HTTP
-- **Socket.IO Client** - WebSockets cliente
+- **React Router 7.9.6** - Routing
+- **Axios 1.13.2** - Cliente HTTP
+- **Socket.IO Client 4.8.1** - WebSockets cliente
 - **React Hot Toast** - Notificaciones
 - **Lucide React** - Iconos SVG
-- **Context API** - Estado global (Auth + Cart)
+- **Zustand 5.0.8** - Estado global (alternativa a Context API)
 
 ### Base de Datos
 - **PostgreSQL 16** - Base de datos relacional
@@ -405,7 +406,42 @@ docker exec -it cafe-limon-db psql -U postgres -d cafe_limon_dev -c "\dt"
 docker exec -it cafe-limon-db psql -U postgres -d cafe_limon_dev -c "SELECT id, name, price FROM products LIMIT 10;"
 ```
 
-## 🧪 Testing del Sistema
+## 🧪 Testing y Calidad del Código
+
+### Cobertura de Pruebas Unitarias
+
+**Backend (Spring Boot + JUnit 5)**
+- ✅ **180 tests** ejecutándose exitosamente
+- ✅ **92% de cobertura** de código (JaCoCo)
+- ✅ Pruebas de servicios: ProductService, OrderService, AuthService, UserService, CategoryService, TableService, StatsService, MenuService, QRCodeService, WebSocketService
+- ✅ Pruebas de controladores con MockMvc
+- ✅ Pruebas de excepciones y validaciones
+
+**Frontend (React + Vitest)**
+- ✅ **240 tests pasando** de 246 totales (97.6% tasa de éxito)
+- ✅ Configuración de Vitest + React Testing Library
+- ✅ Pruebas de utilidades: formatters, validators, localStorage
+- ✅ Pruebas de servicios: api, auth, menu, order, table, websocket
+- ✅ Pruebas de hooks: useMenu, useOrders, useWebSocket
+
+### Ejecutar Pruebas
+
+```bash
+# Backend - Ejecutar todos los tests con cobertura
+cd backend
+./mvnw test
+./mvnw jacoco:report
+
+# Ver reporte de cobertura
+open target/site/jacoco/index.html
+
+# Frontend - Ejecutar todos los tests
+cd frontend
+npm test
+
+# Ver cobertura del frontend
+npm run test:coverage
+```
 
 ### Test Manual Completo
 
@@ -584,11 +620,47 @@ docker exec -it cafe-limon-db psql -U postgres -d cafe_limon_dev -c "SELECT COUN
 # Debe retornar: 151
 ```
 
+## 🚀 Despliegue en Producción
+
+El proyecto está listo para desplegarse en plataformas gratuitas:
+
+### Opción Recomendada (Gratuita)
+
+- **Frontend**: Vercel (gratis ilimitado, 100GB bandwidth/mes)
+- **Backend + Base de Datos**: Railway ($5 crédito mensual gratis, ~500 horas/mes)
+
+### Guías de Despliegue
+
+📖 **[QUICK-DEPLOY.md](QUICK-DEPLOY.md)** - Despliega en 10 minutos
+- Git setup y push a GitHub
+- Configurar Railway para backend + PostgreSQL
+- Configurar Vercel para frontend
+- Variables de entorno de producción
+
+📖 **[DEPLOYMENT.md](DEPLOYMENT.md)** - Guía completa y detallada
+- Preparación paso a paso
+- Dockerización del backend
+- Build del frontend
+- Verificación del despliegue
+- Troubleshooting y mantenimiento
+- Costos y límites de las plataformas
+
+### Archivos de Configuración Incluidos
+
+```
+✅ backend/Dockerfile          # Imagen Docker multi-stage
+✅ backend/railway.json         # Configuración Railway
+✅ frontend/vercel.json         # Configuración Vercel
+✅ frontend/.env.production.example  # Template de variables de entorno
+✅ .gitignore                   # Exclusiones de Git
+```
+
 ## 📚 Documentación Adicional
 
 - [Arquitectura del Sistema](docs/ARCHITECTURE.md)
 - [Documentación de API](docs/API.md)
-- [Guía de Deployment](docs/DEPLOYMENT.md)
+- [Guía de Deployment Completa](DEPLOYMENT.md)
+- [Guía Rápida de Deployment](QUICK-DEPLOY.md)
 - [Requerimientos del Proyecto](docs/REQUIREMENTS.md)
 - [Base de Datos](database/README.md)
 
