@@ -1,20 +1,67 @@
-# Configuración para producción
+# Configuración para producción (Railway, Heroku, etc.)
 spring:
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:cafe_limon_prod}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
+    # Railway proporciona DATABASE_URL automáticamente
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/cafe_limon_prod}
     hikari:
       maximum-pool-size: 10
       minimum-idle: 5
       connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
 
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+        jdbc:
+          lob:
+            non_contextual_creation: true
 
+  # Jackson
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+
+# Server
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: always
+    include-binding-errors: never
+    include-stacktrace: never
+
+# JWT
+jwt:
+  secret: ${JWT_SECRET:CAMBIAR-EN-PRODUCCION-POR-FAVOR}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+# CORS
+cors:
+  allowed-origins: ${FRONTEND_URL:http://localhost:5173}
+  allowed-methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+
+# App
+app:
+  name: Café Limón
+  version: 1.0.0
+  frontend:
+    url: ${FRONTEND_URL:http://localhost:5173}
+  qr:
+    base-url: ${FRONTEND_URL:http://localhost:5173}
+
+# Logging
 logging:
   level:
     root: WARN
     com.cafelimon: INFO
+    org.springframework.web: WARN
+    org.springframework.security: WARN
+    org.hibernate: WARN
